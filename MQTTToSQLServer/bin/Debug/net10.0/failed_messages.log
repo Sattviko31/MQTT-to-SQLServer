@@ -1,0 +1,355 @@
+[2026-07-22 13:36:03] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.615","_groupName":"KWHMETER1","VR":"2349","VS":"2375","VT":"2345","AMPERE_R":"9756","AMPERE_S":"12747","AMPERE_T":"11832","CosPhi":"961","W":"77720","TotalW1M":"269300","AKTIF_W":"1270997","TotalW":"657692","F":"4999"}
+---
+[2026-07-22 13:36:05] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.615","_groupName":"KWHMETER2","VR":"25323","VS":"25606","VT":"25366","AMPERE_R":"2703","AMPERE_S":"1583","AMPERE_T":"4349","CosPhi":"962","W":"211397","TotalW1M":"518964","AKTIF_W":"3139986","TotalW":"870267","F":"5000"}
+---
+[2026-07-22 13:36:08] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.616","_groupName":"KWHMETER3","VR":"23440","VS":"23778","VT":"23455","AMPERE_R":"11024","AMPERE_S":"1904","AMPERE_T":"3690","CosPhi":"821","W":"320620","TotalW1M":"2028011","AKTIF_W":"8932456","TotalW":"5032430","F":"5000"}
+---
+[2026-07-22 13:36:11] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.616","_groupName":"KWHMETER4","VR":"2344","VS":"2377","VT":"2345","AMPERE_R":"6231","AMPERE_S":"6568","AMPERE_T":"11307","CosPhi":"549","W":"31091","TotalW1M":"109933","AKTIF_W":"463310","TotalW":"258428","F":"4999"}
+---
+[2026-07-22 13:36:14] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.616","_groupName":"KWHMETER5","VR":"24199","VS":"24243","VT":"24127","AMPERE_R":"12580","AMPERE_S":"16481","AMPERE_T":"6907","CosPhi":"898","W":"767100","TotalW1M":"2020103","AKTIF_W":"4750493","TotalW":"4315028","F":"5000"}
+---
+[2026-07-22 13:36:17] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.617","_groupName":"KWHMETER6","VR":"2432","VS":"2443","VT":"2425","AMPERE_R":"4502","AMPERE_S":"3477","AMPERE_T":"6290","CosPhi":"915","W":"31500","TotalW1M":"168337","AKTIF_W":"480999","TotalW":"425309","F":"5000"}
+---
+[2026-07-22 13:36:19] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.617","_groupName":"KWHMETER7","VR":"2377","VS":"2350","VT":"2351","AMPERE_R":"64964","AMPERE_S":"58580","AMPERE_T":"59640","CosPhi":"494","W":"213120","TotalW1M":"541078","AKTIF_W":"725046","TotalW":"725046","F":"5000"}
+---
+[2026-07-22 13:36:22] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.617","_groupName":"KWHMETER8","VR":"2413","VS":"2436","VT":"2425","AMPERE_R":"54816","AMPERE_S":"53168","AMPERE_T":"55000","CosPhi":"656","W":"259200","TotalW1M":"486075","AKTIF_W":"1388159","TotalW":"1227841","F":"4999"}
+---
+[2026-07-22 13:36:29] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.615","_groupName":"KWHMETER1","VR":"2349","VS":"2375","VT":"2345","AMPERE_R":"9756","AMPERE_S":"12747","AMPERE_T":"11832","CosPhi":"961","W":"77720","TotalW1M":"269300","AKTIF_W":"1270997","TotalW":"657692","F":"4999"}
+---
+[2026-07-22 13:36:36] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.615","_groupName":"KWHMETER1","VR":"2349","VS":"2375","VT":"2345","AMPERE_R":"9868","AMPERE_S":"12725","AMPERE_T":"11836","CosPhi":"961","W":"77940","TotalW1M":"269300","AKTIF_W":"1270998","TotalW":"657693","F":"5000"}
+---
+[2026-07-22 13:36:45] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.615","_groupName":"KWHMETER2","VR":"25327","VS":"25607","VT":"25371","AMPERE_R":"2698","AMPERE_S":"1572","AMPERE_T":"4362","CosPhi":"961","W":"210956","TotalW1M":"518964","AKTIF_W":"3139989","TotalW":"870269","F":"5000"}
+---
+[2026-07-22 13:36:49] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.615","_groupName":"KWHMETER3","VR":"23438","VS":"23775","VT":"23457","AMPERE_R":"11048","AMPERE_S":"1904","AMPERE_T":"3666","CosPhi":"822","W":"319940","TotalW1M":"2028011","AKTIF_W":"8932459","TotalW":"5032433","F":"5000"}
+---
+[2026-07-22 13:36:55] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.616","_groupName":"KWHMETER4","VR":"2345","VS":"2377","VT":"2345","AMPERE_R":"6197","AMPERE_S":"6601","AMPERE_T":"11343","CosPhi":"553","W":"31451","TotalW1M":"109933","AKTIF_W":"463311","TotalW":"258429","F":"5000"}
+---
+[2026-07-22 13:37:05] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.616","_groupName":"KWHMETER5","VR":"24204","VS":"24244","VT":"24136","AMPERE_R":"12482","AMPERE_S":"16515","AMPERE_T":"6575","CosPhi":"895","W":"768600","TotalW1M":"2020103","AKTIF_W":"4750505","TotalW":"4315040","F":"5000"}
+---
+[2026-07-22 13:37:15] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.616","_groupName":"KWHMETER6","VR":"2431","VS":"2443","VT":"2425","AMPERE_R":"4997","AMPERE_S":"3490","AMPERE_T":"6944","CosPhi":"892","W":"33500","TotalW1M":"168338","AKTIF_W":"481000","TotalW":"425310","F":"5000"}
+---
+[2026-07-22 13:37:18] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.617","_groupName":"KWHMETER7","VR":"2378","VS":"2351","VT":"2352","AMPERE_R":"64836","AMPERE_S":"58480","AMPERE_T":"59576","CosPhi":"493","W":"213280","TotalW1M":"541081","AKTIF_W":"725049","TotalW":"725049","F":"5000"}
+---
+[2026-07-22 13:37:21] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:06.617","_groupName":"KWHMETER8","VR":"2413","VS":"2436","VT":"2425","AMPERE_R":"54696","AMPERE_S":"53132","AMPERE_T":"55040","CosPhi":"655","W":"259040","TotalW1M":"486078","AKTIF_W":"1388162","TotalW":"1227844","F":"5000"}
+---
+[2026-07-22 13:37:23] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.615","_groupName":"KWHMETER2","VR":"25323","VS":"25606","VT":"25366","AMPERE_R":"2703","AMPERE_S":"1583","AMPERE_T":"4349","CosPhi":"962","W":"211397","TotalW1M":"518964","AKTIF_W":"3139986","TotalW":"870267","F":"5000"}
+---
+[2026-07-22 13:37:26] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.616","_groupName":"KWHMETER3","VR":"23440","VS":"23778","VT":"23455","AMPERE_R":"11024","AMPERE_S":"1904","AMPERE_T":"3690","CosPhi":"821","W":"320620","TotalW1M":"2028011","AKTIF_W":"8932456","TotalW":"5032430","F":"5000"}
+---
+[2026-07-22 13:37:29] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.615","_groupName":"KWHMETER1","VR":"2346","VS":"2373","VT":"2344","AMPERE_R":"9932","AMPERE_S":"12655","AMPERE_T":"11753","CosPhi":"960","W":"77770","TotalW1M":"269300","AKTIF_W":"1270999","TotalW":"657694","F":"5000"}
+---
+[2026-07-22 13:37:31] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.615","_groupName":"KWHMETER2","VR":"25310","VS":"25583","VT":"25347","AMPERE_R":"2699","AMPERE_S":"1570","AMPERE_T":"4329","CosPhi":"963","W":"210241","TotalW1M":"518964","AKTIF_W":"3139992","TotalW":"870273","F":"5000"}
+---
+[2026-07-22 13:37:34] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.616","_groupName":"KWHMETER3","VR":"23414","VS":"23752","VT":"23436","AMPERE_R":"11002","AMPERE_S":"1897","AMPERE_T":"3757","CosPhi":"823","W":"321810","TotalW1M":"2028011","AKTIF_W":"8932463","TotalW":"5032437","F":"5000"}
+---
+[2026-07-22 13:37:37] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.616","_groupName":"KWHMETER4","VR":"2342","VS":"2375","VT":"2343","AMPERE_R":"6212","AMPERE_S":"6586","AMPERE_T":"11464","CosPhi":"556","W":"31691","TotalW1M":"109933","AKTIF_W":"463311","TotalW":"258429","F":"5000"}
+---
+[2026-07-22 13:37:39] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.616","_groupName":"KWHMETER5","VR":"24180","VS":"24220","VT":"24115","AMPERE_R":"12281","AMPERE_S":"16551","AMPERE_T":"6637","CosPhi":"890","W":"769000","TotalW1M":"2020103","AKTIF_W":"4750513","TotalW":"4315048","F":"5000"}
+---
+[2026-07-22 13:37:42] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.617","_groupName":"KWHMETER6","VR":"2425","VS":"2438","VT":"2419","AMPERE_R":"14060","AMPERE_S":"14525","AMPERE_T":"17520","CosPhi":"1000","W":"68550","TotalW1M":"168338","AKTIF_W":"481000","TotalW":"425310","F":"5000"}
+---
+[2026-07-22 13:37:45] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.617","_groupName":"KWHMETER7","VR":"2376","VS":"2349","VT":"2349","AMPERE_R":"64968","AMPERE_S":"58424","AMPERE_T":"59592","CosPhi":"494","W":"213280","TotalW1M":"541085","AKTIF_W":"725053","TotalW":"725053","F":"5000"}
+---
+[2026-07-22 13:37:48] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:11.617","_groupName":"KWHMETER8","VR":"2412","VS":"2433","VT":"2422","AMPERE_R":"54432","AMPERE_S":"53176","AMPERE_T":"54896","CosPhi":"655","W":"258000","TotalW1M":"486083","AKTIF_W":"1388167","TotalW":"1227849","F":"5000"}
+---
+[2026-07-22 13:37:50] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.616","_groupName":"KWHMETER4","VR":"2344","VS":"2377","VT":"2345","AMPERE_R":"6231","AMPERE_S":"6568","AMPERE_T":"11307","CosPhi":"549","W":"31091","TotalW1M":"109933","AKTIF_W":"463310","TotalW":"258428","F":"4999"}
+---
+[2026-07-22 13:37:53] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.616","_groupName":"KWHMETER5","VR":"24199","VS":"24243","VT":"24127","AMPERE_R":"12580","AMPERE_S":"16481","AMPERE_T":"6907","CosPhi":"898","W":"767100","TotalW1M":"2020103","AKTIF_W":"4750493","TotalW":"4315028","F":"5000"}
+---
+[2026-07-22 13:37:56] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.615","_groupName":"KWHMETER1","VR":"2346","VS":"2372","VT":"2344","AMPERE_R":"9904","AMPERE_S":"12625","AMPERE_T":"11758","CosPhi":"961","W":"77670","TotalW1M":"269300","AKTIF_W":"1271000","TotalW":"657695","F":"5002"}
+---
+[2026-07-22 13:37:58] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.615","_groupName":"KWHMETER2","VR":"25310","VS":"25580","VT":"25347","AMPERE_R":"2713","AMPERE_S":"1568","AMPERE_T":"4323","CosPhi":"964","W":"210619","TotalW1M":"518964","AKTIF_W":"3139995","TotalW":"870276","F":"5001"}
+---
+[2026-07-22 13:38:01] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.616","_groupName":"KWHMETER3","VR":"23414","VS":"23748","VT":"23435","AMPERE_R":"11027","AMPERE_S":"1900","AMPERE_T":"3731","CosPhi":"820","W":"321640","TotalW1M":"2028011","AKTIF_W":"8932467","TotalW":"5032441","F":"5001"}
+---
+[2026-07-22 13:38:04] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.616","_groupName":"KWHMETER4","VR":"2343","VS":"2374","VT":"2343","AMPERE_R":"6316","AMPERE_S":"6558","AMPERE_T":"11553","CosPhi":"553","W":"31751","TotalW1M":"109933","AKTIF_W":"463312","TotalW":"258430","F":"5002"}
+---
+[2026-07-22 13:38:06] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.616","_groupName":"KWHMETER5","VR":"24180","VS":"24221","VT":"24119","AMPERE_R":"12440","AMPERE_S":"16519","AMPERE_T":"6442","CosPhi":"891","W":"766600","TotalW1M":"2020103","AKTIF_W":"4750527","TotalW":"4315061","F":"5001"}
+---
+[2026-07-22 13:38:09] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.617","_groupName":"KWHMETER6","VR":"2427","VS":"2438","VT":"2420","AMPERE_R":"12665","AMPERE_S":"13470","AMPERE_T":"15857","CosPhi":"799","W":"81500","TotalW1M":"168339","AKTIF_W":"481001","TotalW":"425311","F":"5002"}
+---
+[2026-07-22 13:38:12] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.617","_groupName":"KWHMETER7","VR":"2375","VS":"2349","VT":"2349","AMPERE_R":"64892","AMPERE_S":"58608","AMPERE_T":"59696","CosPhi":"492","W":"212800","TotalW1M":"541087","AKTIF_W":"725055","TotalW":"725055","F":"5002"}
+---
+[2026-07-22 13:38:14] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:16.617","_groupName":"KWHMETER8","VR":"2412","VS":"2433","VT":"2423","AMPERE_R":"54424","AMPERE_S":"52940","AMPERE_T":"54696","CosPhi":"655","W":"258240","TotalW1M":"486085","AKTIF_W":"1388169","TotalW":"1227851","F":"5002"}
+---
+[2026-07-22 13:38:17] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.617","_groupName":"KWHMETER6","VR":"2432","VS":"2443","VT":"2425","AMPERE_R":"4502","AMPERE_S":"3477","AMPERE_T":"6290","CosPhi":"915","W":"31500","TotalW1M":"168337","AKTIF_W":"480999","TotalW":"425309","F":"5000"}
+---
+[2026-07-22 13:38:20] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.617","_groupName":"KWHMETER7","VR":"2377","VS":"2350","VT":"2351","AMPERE_R":"64964","AMPERE_S":"58580","AMPERE_T":"59640","CosPhi":"494","W":"213120","TotalW1M":"541078","AKTIF_W":"725046","TotalW":"725046","F":"5000"}
+---
+[2026-07-22 13:38:22] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.615","_groupName":"KWHMETER1","VR":"2346","VS":"2372","VT":"2343","AMPERE_R":"9934","AMPERE_S":"12677","AMPERE_T":"11842","CosPhi":"961","W":"77690","TotalW1M":"269300","AKTIF_W":"1271001","TotalW":"657696","F":"5002"}
+---
+[2026-07-22 13:38:25] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.615","_groupName":"KWHMETER2","VR":"25305","VS":"25572","VT":"25336","AMPERE_R":"2710","AMPERE_S":"1572","AMPERE_T":"4372","CosPhi":"962","W":"211523","TotalW1M":"518964","AKTIF_W":"3139997","TotalW":"870278","F":"5002"}
+---
+[2026-07-22 13:38:28] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.616","_groupName":"KWHMETER3","VR":"23410","VS":"23740","VT":"23432","AMPERE_R":"10984","AMPERE_S":"1902","AMPERE_T":"3695","CosPhi":"820","W":"319600","TotalW1M":"2028011","AKTIF_W":"8932471","TotalW":"5032445","F":"5002"}
+---
+[2026-07-22 13:38:30] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.616","_groupName":"KWHMETER4","VR":"2342","VS":"2373","VT":"2343","AMPERE_R":"6554","AMPERE_S":"6562","AMPERE_T":"11512","CosPhi":"547","W":"31475","TotalW1M":"109933","AKTIF_W":"463312","TotalW":"258430","F":"5002"}
+---
+[2026-07-22 13:38:33] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.617","_groupName":"KWHMETER5","VR":"24171","VS":"24211","VT":"24111","AMPERE_R":"12567","AMPERE_S":"16468","AMPERE_T":"6448","CosPhi":"886","W":"763500","TotalW1M":"2020103","AKTIF_W":"4750536","TotalW":"4315071","F":"5001"}
+---
+[2026-07-22 13:38:36] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.617","_groupName":"KWHMETER6","VR":"2426","VS":"2437","VT":"2419","AMPERE_R":"12692","AMPERE_S":"13427","AMPERE_T":"15827","CosPhi":"797","W":"81350","TotalW1M":"168340","AKTIF_W":"481002","TotalW":"425312","F":"5002"}
+---
+[2026-07-22 13:38:38] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.617","_groupName":"KWHMETER7","VR":"2374","VS":"2348","VT":"2349","AMPERE_R":"65096","AMPERE_S":"58896","AMPERE_T":"59840","CosPhi":"493","W":"213200","TotalW1M":"541090","AKTIF_W":"725058","TotalW":"725058","F":"5002"}
+---
+[2026-07-22 13:38:41] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:21.618","_groupName":"KWHMETER8","VR":"2411","VS":"2432","VT":"2422","AMPERE_R":"54752","AMPERE_S":"53112","AMPERE_T":"55284","CosPhi":"657","W":"259360","TotalW1M":"486090","AKTIF_W":"1388174","TotalW":"1227856","F":"5001"}
+---
+[2026-07-22 13:38:44] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.617","_groupName":"KWHMETER8","VR":"2413","VS":"2436","VT":"2425","AMPERE_R":"54816","AMPERE_S":"53168","AMPERE_T":"55000","CosPhi":"656","W":"259200","TotalW1M":"486075","AKTIF_W":"1388159","TotalW":"1227841","F":"4999"}
+---
+[2026-07-22 13:38:47] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.615","_groupName":"KWHMETER1","VR":"2346","VS":"2372","VT":"2339","AMPERE_R":"9898","AMPERE_S":"12697","AMPERE_T":"11911","CosPhi":"960","W":"78040","TotalW1M":"269300","AKTIF_W":"1271003","TotalW":"657698","F":"5002"}
+---
+[2026-07-22 13:38:49] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.615","_groupName":"KWHMETER2","VR":"25297","VS":"25570","VT":"25330","AMPERE_R":"2705","AMPERE_S":"1571","AMPERE_T":"4362","CosPhi":"964","W":"211271","TotalW1M":"518964","AKTIF_W":"3140000","TotalW":"870281","F":"5002"}
+---
+[2026-07-22 13:38:52] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.616","_groupName":"KWHMETER3","VR":"23404","VS":"23736","VT":"23391","AMPERE_R":"10946","AMPERE_S":"1905","AMPERE_T":"3762","CosPhi":"823","W":"320450","TotalW1M":"2028011","AKTIF_W":"8932476","TotalW":"5032450","F":"5002"}
+---
+[2026-07-22 13:38:55] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.616","_groupName":"KWHMETER4","VR":"2342","VS":"2374","VT":"2339","AMPERE_R":"6526","AMPERE_S":"6588","AMPERE_T":"11521","CosPhi":"544","W":"31535","TotalW1M":"109933","AKTIF_W":"463313","TotalW":"258431","F":"5002"}
+---
+[2026-07-22 13:38:57] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.617","_groupName":"KWHMETER5","VR":"24165","VS":"24210","VT":"24103","AMPERE_R":"12467","AMPERE_S":"16475","AMPERE_T":"6506","CosPhi":"884","W":"772600","TotalW1M":"2020103","AKTIF_W":"4750547","TotalW":"4315082","F":"5002"}
+---
+[2026-07-22 13:39:00] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.618","_groupName":"KWHMETER6","VR":"2425","VS":"2437","VT":"2418","AMPERE_R":"12625","AMPERE_S":"13500","AMPERE_T":"15830","CosPhi":"798","W":"81250","TotalW1M":"168341","AKTIF_W":"481003","TotalW":"425313","F":"5002"}
+---
+[2026-07-22 13:39:03] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.618","_groupName":"KWHMETER7","VR":"2374","VS":"2345","VT":"2349","AMPERE_R":"66392","AMPERE_S":"60280","AMPERE_T":"63216","CosPhi":"496","W":"220720","TotalW1M":"541094","AKTIF_W":"725062","TotalW":"725062","F":"5002"}
+---
+[2026-07-22 13:39:05] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:26.619","_groupName":"KWHMETER8","VR":"2410","VS":"2432","VT":"2421","AMPERE_R":"54504","AMPERE_S":"52916","AMPERE_T":"54776","CosPhi":"656","W":"257600","TotalW1M":"486093","AKTIF_W":"1388177","TotalW":"1227859","F":"5002"}
+---
+[2026-07-22 13:39:08] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:01.615","_groupName":"KWHMETER1","VR":"2349","VS":"2375","VT":"2345","AMPERE_R":"9756","AMPERE_S":"12747","AMPERE_T":"11832","CosPhi":"961","W":"77720","TotalW1M":"269300","AKTIF_W":"1270997","TotalW":"657692","F":"4999"}
+---
+[2026-07-22 13:39:11] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.615","_groupName":"KWHMETER1","VR":"2347","VS":"2372","VT":"2340","AMPERE_R":"9821","AMPERE_S":"12722","AMPERE_T":"11933","CosPhi":"960","W":"78000","TotalW1M":"269300","AKTIF_W":"1271004","TotalW":"657699","F":"5002"}
+---
+[2026-07-22 13:39:13] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.615","_groupName":"KWHMETER2","VR":"25302","VS":"25575","VT":"25337","AMPERE_R":"2704","AMPERE_S":"1571","AMPERE_T":"4346","CosPhi":"965","W":"210998","TotalW1M":"518964","AKTIF_W":"3140004","TotalW":"870285","F":"5001"}
+---
+[2026-07-22 13:39:16] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.616","_groupName":"KWHMETER3","VR":"23420","VS":"23744","VT":"23401","AMPERE_R":"10868","AMPERE_S":"1898","AMPERE_T":"3625","CosPhi":"820","W":"316710","TotalW1M":"2028011","AKTIF_W":"8932482","TotalW":"5032456","F":"5001"}
+---
+[2026-07-22 13:39:19] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.616","_groupName":"KWHMETER4","VR":"2343","VS":"2374","VT":"2340","AMPERE_R":"6556","AMPERE_S":"6567","AMPERE_T":"11509","CosPhi":"543","W":"31403","TotalW1M":"109933","AKTIF_W":"463314","TotalW":"258431","F":"5001"}
+---
+[2026-07-22 13:39:22] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.616","_groupName":"KWHMETER5","VR":"24172","VS":"24214","VT":"24111","AMPERE_R":"12879","AMPERE_S":"16521","AMPERE_T":"6379","CosPhi":"895","W":"774100","TotalW1M":"2020103","AKTIF_W":"4750558","TotalW":"4315093","F":"5001"}
+---
+[2026-07-22 13:39:24] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.617","_groupName":"KWHMETER6","VR":"2428","VS":"2440","VT":"2422","AMPERE_R":"5560","AMPERE_S":"4820","AMPERE_T":"7880","CosPhi":"618","W":"47400","TotalW1M":"168343","AKTIF_W":"481005","TotalW":"425315","F":"5001"}
+---
+[2026-07-22 13:39:27] Topic: data/KWHAPP/kwhapp7/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.617","_groupName":"KWHMETER7","VR":"2375","VS":"2345","VT":"2350","AMPERE_R":"66576","AMPERE_S":"60336","AMPERE_T":"63520","CosPhi":"496","W":"222720","TotalW1M":"541095","AKTIF_W":"725063","TotalW":"725063","F":"5001"}
+---
+[2026-07-22 13:39:30] Topic: data/KWHAPP/kwhapp8/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:31.617","_groupName":"KWHMETER8","VR":"2411","VS":"2432","VT":"2422","AMPERE_R":"54808","AMPERE_S":"53000","AMPERE_T":"55288","CosPhi":"657","W":"259440","TotalW1M":"486097","AKTIF_W":"1388181","TotalW":"1227863","F":"5001"}
+---
+[2026-07-22 13:39:32] Topic: data/KWHAPP/kwhapp1/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:36.616","_groupName":"KWHMETER1","VR":"2347","VS":"2374","VT":"2340","AMPERE_R":"9923","AMPERE_S":"12746","AMPERE_T":"11945","CosPhi":"961","W":"78320","TotalW1M":"269300","AKTIF_W":"1271005","TotalW":"657700","F":"5002"}
+---
+[2026-07-22 13:39:35] Topic: data/KWHAPP/kwhapp2/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:36.616","_groupName":"KWHMETER2","VR":"25302","VS":"25589","VT":"25336","AMPERE_R":"2710","AMPERE_S":"1577","AMPERE_T":"4353","CosPhi":"963","W":"211208","TotalW1M":"518964","AKTIF_W":"3140006","TotalW":"870287","F":"5002"}
+---
+[2026-07-22 13:39:38] Topic: data/KWHAPP/kwhapp3/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:36.616","_groupName":"KWHMETER3","VR":"23426","VS":"23765","VT":"23399","AMPERE_R":"10903","AMPERE_S":"1901","AMPERE_T":"3711","CosPhi":"824","W":"318580","TotalW1M":"2028011","AKTIF_W":"8932486","TotalW":"5032460","F":"5002"}
+---
+[2026-07-22 13:39:40] Topic: data/KWHAPP/kwhapp4/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:36.617","_groupName":"KWHMETER4","VR":"2343","VS":"2375","VT":"2339","AMPERE_R":"6521","AMPERE_S":"6583","AMPERE_T":"11426","CosPhi":"544","W":"31439","TotalW1M":"109933","AKTIF_W":"463314","TotalW":"258432","F":"5002"}
+---
+[2026-07-22 13:39:43] Topic: data/KWHAPP/kwhapp5/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:36.617","_groupName":"KWHMETER5","VR":"24168","VS":"24226","VT":"24110","AMPERE_R":"13093","AMPERE_S":"16499","AMPERE_T":"6489","CosPhi":"889","W":"776300","TotalW1M":"2020103","AKTIF_W":"4750568","TotalW":"4315103","F":"5002"}
+---
+[2026-07-22 13:39:46] Topic: data/KWHAPP/kwhapp6/12345678 | Reason: Invalid column name 'VR'.
+Invalid column name 'VS'.
+Invalid column name 'VT'.
+Payload: {"_terminalTime":"2026-07-22 14:36:36.618","_groupName":"KWHMETER6","VR":"2428","VS":"2441","VT":"2422","AMPERE_R":"4460","AMPERE_S":"3475","AMPERE_T":"6295","CosPhi":"915","W":"31550","TotalW1M":"168343","AKTIF_W":"481005","TotalW":"425315","F":"5002"}
+---

@@ -1,0 +1,2 @@
+D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\publish\win-x64\MQTTToSQLServer.pdb
+D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\publish\win-x64\MQTTToSQLServer.exe
