@@ -97,6 +97,10 @@
               "version": "[2.1.0, )",
               "autoReferenced": true
             },
+            "System.ServiceProcess.ServiceController": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            },
             "System.Text.Json": {
               "target": "Package",
               "version": "[4.7.2, )"

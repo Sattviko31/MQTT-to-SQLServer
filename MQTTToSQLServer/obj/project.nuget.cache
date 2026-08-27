@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4FftEHimZn4=",
+  "dgSpecHash": "OlBKFial9oU=",
   "success": true,
   "projectFilePath": "C:\\Users\\eats\\Documents\\WORKSPACE\\REPO\\MQTT-to-SQLServer\\MQTTToSQLServer\\MQTTToSQLServer.csproj",
   "expectedPackageFiles": [
@@ -60,6 +60,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.data.sqlclient\\4.5.1\\system.data.sqlclient.4.5.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.diagnostics.debug\\4.0.11\\system.diagnostics.debug.4.0.11.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.7.0\\system.diagnostics.diagnosticsource.4.7.0.nupkg.sha512",
+    "C:\\Users\\eats\\.nuget\\packages\\system.diagnostics.eventlog\\4.5.0\\system.diagnostics.eventlog.4.5.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.globalization\\4.0.11\\system.globalization.4.0.11.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.8.0\\system.identitymodel.tokens.jwt.6.8.0.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.interactive.async\\3.1.1\\system.interactive.async.3.1.1.nupkg.sha512",
@@ -86,11 +87,13 @@
     "C:\\Users\\eats\\.nuget\\packages\\system.security.cryptography.protecteddata\\4.7.0\\system.security.cryptography.protecteddata.4.7.0.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.security.permissions\\4.7.0\\system.security.permissions.4.7.0.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
+    "C:\\Users\\eats\\.nuget\\packages\\system.serviceprocess.servicecontroller\\4.5.0\\system.serviceprocess.servicecontroller.4.5.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.text.encoding\\4.0.11\\system.text.encoding.4.0.11.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.text.encoding.codepages\\4.7.0\\system.text.encoding.codepages.4.7.0.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.text.encodings.web\\4.7.1\\system.text.encodings.web.4.7.1.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.threading\\4.0.11\\system.threading.4.0.11.nupkg.sha512",
+    "C:\\Users\\eats\\.nuget\\packages\\system.threading.accesscontrol\\4.5.0\\system.threading.accesscontrol.4.5.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.threading.tasks\\4.0.11\\system.threading.tasks.4.0.11.nupkg.sha512"
   ],
   "logs": [

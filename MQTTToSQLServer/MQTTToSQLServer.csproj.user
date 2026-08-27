@@ -3,4 +3,9 @@
   <PropertyGroup>
     <_LastSelectedProfileId>C:\Users\user\source\repos\MQTTToSQLServer\MQTTToSQLServer\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="MqttToSqlWindowsService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

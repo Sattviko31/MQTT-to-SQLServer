@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.4" />
     <PackageReference Include="MQTTnet" Version="4.3.7.1207" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

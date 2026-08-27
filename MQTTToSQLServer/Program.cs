@@ -1,10 +1,12 @@
-#nullable enable
+﻿#nullable enable
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -34,7 +36,7 @@ namespace MQTTToSQLServer
         public DateTime ReceivedAt { get; set; } = DateTime.Now;
     }
 
-    class Program
+    public class Program
     {
         private static AppConfiguration _config = new AppConfiguration();
         private static string _connectionString = "";
@@ -53,51 +55,83 @@ namespace MQTTToSQLServer
 
         private static readonly Regex SafeSqlColumnNameRegex = new Regex(@"^[a-zA-Z0-9_]+$", RegexOptions.Compiled);
 
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║   HAIWELL ELECTRICAL - MQTT TO SQL SERVER                ║");
-            Console.WriteLine("║   Version 7.0 - Production Architecture (EF Core + JSON) ║");
-            Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
-            Console.WriteLine();
+            // Detect if running as Windows Service or interactive Console
+            bool isService = !Environment.UserInteractive && !args.Contains("--console") && !Debugger.IsAttached;
 
-            Console.CancelKeyPress += (sender, eventArgs) =>
+            if (isService)
             {
-                eventArgs.Cancel = true;
+                // Run as Windows Service
+                ServiceBase.Run(new MqttToSqlWindowsService());
+            }
+            else
+            {
+                // Run interactively in Console
+                Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
+                Console.WriteLine("║   HAIWELL ELECTRICAL - MQTT TO SQL SERVER                ║");
+                Console.WriteLine("║   Version 7.1 - Windows Service & Console Dual Mode      ║");
+                Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
+                Console.WriteLine();
+
+                Console.CancelKeyPress += (sender, eventArgs) =>
+                {
+                    eventArgs.Cancel = true;
+                    _cts.Cancel();
+                    LogMessage("[!] Shutdown signal received. Draining queue...");
+                };
+
+                var serviceTask = Task.Run(() => StartServiceAsync(_cts.Token));
+
+                LogMessage("[✓] Service is running in console mode. Press Ctrl+C or Enter to exit.");
+
+                var readKeyTask = Task.Run(() => Console.ReadLine());
+                await Task.WhenAny(readKeyTask, Task.Delay(-1, _cts.Token)).ContinueWith(_ => { });
+
                 _cts.Cancel();
-                Console.WriteLine("\n[!] Shutdown signal received. Draining queue...");
-            };
+                LogMessage("\nStopping MQTT client and shutting down...");
+                await StopServiceAsync();
+                await serviceTask;
+                LogMessage("Application exited cleanly.");
+            }
+        }
 
-            // 1. Load Configuration from appsettings.json
-            LoadConfiguration();
+        public static async Task StartServiceAsync(CancellationToken ct)
+        {
+            try
+            {
+                // 1. Load Configuration from appsettings.json
+                LoadConfiguration();
 
-            // 2. Load Configurations (ScaleConfig, ColumnMapping, ExistingColumns)
-            await LoadConfigurationsAsync();
+                // 2. Load Configurations (ScaleConfig, ColumnMapping, ExistingColumns)
+                await LoadConfigurationsAsync();
 
-            // 4. Start Background Workers
-            var queueTask = Task.Run(() => ProcessQueueAsync(_cts.Token));
-            var monitorTask = Task.Run(() => MonitorQueueAsync(_cts.Token));
+                // 3. Start Background Workers
+                var queueTask = Task.Run(() => ProcessQueueAsync(ct));
+                var monitorTask = Task.Run(() => MonitorQueueAsync(ct));
 
-            // 5. Connect and Subscribe to MQTT
-            await ConnectAndSubscribeAsync();
+                // 4. Connect and Subscribe to MQTT
+                await ConnectAndSubscribeAsync();
 
-            Console.WriteLine("\n[✓] Service is running. Press Ctrl+C or Enter to exit.");
+                await Task.WhenAll(queueTask, monitorTask);
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"[✗] Fatal service startup error: {ex.Message}", true);
+            }
+        }
 
-            var readKeyTask = Task.Run(() => Console.ReadLine());
-            await Task.WhenAny(readKeyTask, Task.Delay(-1, _cts.Token)).ContinueWith(_ => { });
-
-            _cts.Cancel();
-            Console.WriteLine("\nStopping MQTT client and shutting down...");
+        public static async Task StopServiceAsync()
+        {
             await DisconnectAsync();
-
-            await Task.WhenAll(queueTask, monitorTask);
-            Console.WriteLine("Application exited cleanly.");
         }
 
         private static void LoadConfiguration()
         {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(baseDir)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
@@ -121,10 +155,10 @@ namespace MQTTToSQLServer
                 _config.Processing = procSection.Get<ProcessingSettings>() ?? new ProcessingSettings();
             }
 
-            Console.WriteLine("[✓] Configuration loaded successfully:");
-            Console.WriteLine($"  - MQTT Broker: {_config.Mqtt.BrokerHost}:{_config.Mqtt.BrokerPort}");
-            Console.WriteLine($"  - MQTT Topic: {_config.Mqtt.Topic}");
-            Console.WriteLine($"  - Database Connection: {_connectionString.Split(';')[0]}");
+            LogMessage("[✓] Configuration loaded successfully:");
+            LogMessage($"  - MQTT Broker: {_config.Mqtt.BrokerHost}:{_config.Mqtt.BrokerPort}");
+            LogMessage($"  - MQTT Topic: {_config.Mqtt.Topic}");
+            LogMessage($"  - Database Connection: {_connectionString.Split(';')[0]}");
         }
 
         private static async Task LoadConfigurationsAsync()
@@ -167,14 +201,14 @@ namespace MQTTToSQLServer
                     }
                 }
 
-                Console.WriteLine($"[✓] Loaded {ScaleConfig.Count} scale configurations from DB");
-                Console.WriteLine($"[✓] Loaded {ColumnMapping.Count} column mappings from DB");
-                Console.WriteLine($"[✓] Loaded {ExistingColumns.Count} existing columns in KWHData table");
+                LogMessage($"[✓] Loaded {ScaleConfig.Count} scale configurations from DB");
+                LogMessage($"[✓] Loaded {ColumnMapping.Count} column mappings from DB");
+                LogMessage($"[✓] Loaded {ExistingColumns.Count} existing columns in KWHData table");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[!] Failed to load configurations from DB: {ex.Message}");
-                Console.WriteLine("[!] Using fallback defaults...");
+                LogMessage($"[!] Failed to load configurations from DB: {ex.Message}", true);
+                LogMessage("[!] Using fallback defaults...");
 
                 ScaleConfig["PHASE_R"] = 10m;
                 ScaleConfig["PHASE_S"] = 10m;
@@ -205,13 +239,13 @@ namespace MQTTToSQLServer
 
                 _mqttClient.ConnectedAsync += e =>
                 {
-                    Console.WriteLine("[✓] Connected to MQTT Broker");
+                    LogMessage("[✓] Connected to MQTT Broker");
                     return Task.CompletedTask;
                 };
 
                 _mqttClient.DisconnectedAsync += async e =>
                 {
-                    Console.WriteLine($"[✗] Disconnected from MQTT: {e.Reason}");
+                    LogMessage($"[✗] Disconnected from MQTT: {e.Reason}", true);
                     if (!_cts.IsCancellationRequested)
                     {
                         await Task.Delay(5000);
@@ -219,7 +253,7 @@ namespace MQTTToSQLServer
                         {
                             if (_mqttClient != null && !_mqttClient.IsConnected)
                             {
-                                Console.WriteLine("[*] Reconnecting to MQTT Broker...");
+                                LogMessage("[*] Reconnecting to MQTT Broker...");
                                 await ConnectAndSubscribeAsync();
                             }
                         }
@@ -254,11 +288,11 @@ namespace MQTTToSQLServer
                 await _mqttClient.ConnectAsync(clientOptions);
 
                 await _mqttClient.SubscribeAsync(_config.Mqtt.Topic, MqttQualityOfServiceLevel.AtMostOnce);
-                Console.WriteLine($"[✓] Subscribed to topic ({_config.Mqtt.Topic})");
+                LogMessage($"[✓] Subscribed to topic ({_config.Mqtt.Topic})");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[✗] Connection error: {ex.Message}");
+                LogMessage($"[✗] Connection error: {ex.Message}", true);
             }
         }
 
@@ -283,7 +317,7 @@ namespace MQTTToSQLServer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[✗] Queue error: {ex.Message}");
+                    LogMessage($"[✗] Queue error: {ex.Message}", true);
                     await Task.Delay(1000, ct).ContinueWith(_ => { });
                 }
             }
@@ -297,7 +331,7 @@ namespace MQTTToSQLServer
                 try
                 {
                     await Task.Delay(interval, ct);
-                    Console.WriteLine($"[STATS] Total: {_messageCount} | Success: {_successCount} | Errors: {_errorCount} | Queue: {MessageQueue.Count}");
+                    LogMessage($"[STATS] Total: {_messageCount} | Success: {_successCount} | Errors: {_errorCount} | Queue: {MessageQueue.Count}");
                 }
                 catch (OperationCanceledException)
                 {
@@ -335,7 +369,7 @@ namespace MQTTToSQLServer
             {
                 Interlocked.Increment(ref _errorCount);
                 Interlocked.Increment(ref _messageCount);
-                Console.WriteLine($"[✗] Error: {ex.Message}");
+                LogMessage($"[✗] Error processing message: {ex.Message}", true);
                 await LogFailedMessage(buffer, ex.Message);
             }
         }
@@ -455,7 +489,7 @@ namespace MQTTToSQLServer
             }
 
             DeviceKeyCache.TryAdd(deviceId, deviceKey);
-            Console.WriteLine($"[+] Registered: {deviceId} -> {deviceKey}");
+            LogMessage($"[+] Registered: {deviceId} -> {deviceKey}");
             return deviceKey;
         }
 
@@ -473,13 +507,13 @@ namespace MQTTToSQLServer
 
                 if (!SafeSqlColumnNameRegex.IsMatch(key))
                 {
-                    Console.WriteLine($"[!] Skipping invalid dynamic column name: '{key}'");
+                    LogMessage($"[!] Skipping invalid dynamic column name: '{key}'", true);
                     continue;
                 }
 
                 await AddColumnToDatabaseAsync(key);
                 ExistingColumns.Add(key);
-                Console.WriteLine($"[+] New column added: {key}");
+                LogMessage($"[+] New column added: {key}");
             }
         }
 
@@ -498,7 +532,7 @@ namespace MQTTToSQLServer
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[✗] Failed to add column {columnName}: {ex.Message}");
+                LogMessage($"[✗] Failed to add column {columnName}: {ex.Message}", true);
             }
         }
 
@@ -640,6 +674,28 @@ namespace MQTTToSQLServer
             catch { }
         }
 
+        public static void LogMessage(string message, bool isError = false)
+        {
+            string logText = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
+
+            if (Environment.UserInteractive)
+            {
+                if (isError) Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(logText);
+                if (isError) Console.ResetColor();
+            }
+
+            try
+            {
+                string logDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+                if (!Directory.Exists(logDir))
+                    Directory.CreateDirectory(logDir);
+                string logFile = Path.Combine(logDir, $"mqtt_service_{DateTime.Now:yyyyMMdd}.log");
+                File.AppendAllText(logFile, logText + Environment.NewLine);
+            }
+            catch { }
+        }
+
         private static async Task DisconnectAsync()
         {
             if (_mqttClient != null)
@@ -654,9 +710,9 @@ namespace MQTTToSQLServer
                 }
                 catch { }
             }
-            Console.WriteLine($"\n╔══════════════════════════════════════════════════════════╗");
-            Console.WriteLine($"║   Final Stats: Total={_messageCount} | Success={_successCount} | Errors={_errorCount}   ║");
-            Console.WriteLine($"╚══════════════════════════════════════════════════════════╝");
+            LogMessage($"\n╔══════════════════════════════════════════════════════════╗");
+            LogMessage($"║   Final Stats: Total={_messageCount} | Success={_successCount} | Errors={_errorCount}   ║");
+            LogMessage($"╚══════════════════════════════════════════════════════════╝");
         }
     }
 }
