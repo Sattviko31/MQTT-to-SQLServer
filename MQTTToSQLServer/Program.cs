@@ -57,42 +57,46 @@ namespace MQTTToSQLServer
 
         public static async Task Main(string[] args)
         {
-            // Detect if running as Windows Service or interactive Console
-            bool isService = !Environment.UserInteractive && !args.Contains("--console") && !Debugger.IsAttached;
+            bool isConsoleMode = args.Contains("--console") || Debugger.IsAttached;
 
-            if (isService)
+            if (!isConsoleMode)
             {
-                // Run as Windows Service
-                ServiceBase.Run(new MqttToSqlWindowsService());
-            }
-            else
-            {
-                // Run interactively in Console
-                Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
-                Console.WriteLine("║   HAIWELL ELECTRICAL - MQTT TO SQL SERVER                ║");
-                Console.WriteLine("║   Version 7.1 - Windows Service & Console Dual Mode      ║");
-                Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
-                Console.WriteLine();
-
-                Console.CancelKeyPress += (sender, eventArgs) =>
+                try
                 {
-                    eventArgs.Cancel = true;
-                    _cts.Cancel();
-                    LogMessage("[!] Shutdown signal received. Draining queue...");
-                };
-
-                var serviceTask = Task.Run(() => StartServiceAsync(_cts.Token));
-
-                LogMessage("[✓] Service is running in console mode. Press Ctrl+C or Enter to exit.");
-
-                var readKeyTask = Task.Run(() => Console.ReadLine());
-                await Task.WhenAny(readKeyTask, Task.Delay(-1, _cts.Token)).ContinueWith(_ => { });
-
-                _cts.Cancel();
-                await StopServiceAsync();
-                await serviceTask;
-                LogMessage("[✓] Application exited cleanly.");
+                    ServiceBase.Run(new MqttToSqlWindowsService());
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    LogMessage($"[i] Starting in interactive mode (Service dispatcher: {ex.Message})");
+                }
             }
+
+            // Run interactively in Console
+            Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║   HAIWELL ELECTRICAL - MQTT TO SQL SERVER                ║");
+            Console.WriteLine("║   Version 7.1 - Windows Service & Console Dual Mode      ║");
+            Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
+            Console.WriteLine();
+
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                _cts.Cancel();
+                LogMessage("[!] Shutdown signal received. Draining queue...");
+            };
+
+            var serviceTask = Task.Run(() => StartServiceAsync(_cts.Token));
+
+            LogMessage("[✓] Service is running in console mode. Press Ctrl+C or Enter to exit.");
+
+            var readKeyTask = Task.Run(() => Console.ReadLine());
+            await Task.WhenAny(readKeyTask, Task.Delay(-1, _cts.Token)).ContinueWith(_ => { });
+
+            _cts.Cancel();
+            await StopServiceAsync();
+            await serviceTask;
+            LogMessage("[✓] Application exited cleanly.");
         }
 
         public static async Task StartServiceAsync(CancellationToken ct)
