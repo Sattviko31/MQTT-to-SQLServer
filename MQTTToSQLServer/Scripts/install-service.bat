@@ -78,33 +78,43 @@ if exist "%PUBLISH_DIR%\MQTTToSQLServer.exe" (
     echo [*] Launch Target     : %DOTNET_EXE% %PUBLISH_DIR%\MQTTToSQLServer.dll
 )
 
-:: Stop and remove previous service instance if exists
-sc.exe query "%SERVICE_NAME%" >nul 2>&1
+:: Check if services.msc is open (which locks service deletion/creation)
+tasklist /FI "IMAGENAME eq mmc.exe" 2>nul | find /I "mmc.exe" >nul
 if %errorLevel% equ 0 (
-    echo [*] Stopping existing service...
-    sc.exe stop "%SERVICE_NAME%" >nul 2>&1
-    timeout /t 2 /nobreak >nul
-    echo [*] Deleting previous service definition...
-    sc.exe delete "%SERVICE_NAME%" >nul 2>&1
-    timeout /t 2 /nobreak >nul
+    echo [!] NOTE: Management Console (services.msc) is currently OPEN.
+    echo [!] Please CLOSE 'services.msc' if you experience deletion/creation lock.
 )
 
-:: Create Windows Service
-echo [*] Registering Windows Service '%SERVICE_NAME%'...
-sc.exe create "%SERVICE_NAME%" binPath= "%BIN_PATH%" start= auto DisplayName= "%DISPLAY_NAME%"
+:: Try to configure existing service or create new one
+sc.exe query "%SERVICE_NAME%" >nul 2>&1
+if %errorLevel% equ 0 (
+    echo [*] Updating existing service configuration...
+    sc.exe config "%SERVICE_NAME%" binPath= "%BIN_PATH%" start= auto DisplayName= "%DISPLAY_NAME%" >nul 2>&1
+    if !errorLevel! neq 0 (
+        echo [*] Service is locked/marked for deletion. Forcing cleanup...
+        sc.exe stop "%SERVICE_NAME%" >nul 2>&1
+        timeout /t 1 /nobreak >nul
+        sc.exe delete "%SERVICE_NAME%" >nul 2>&1
+        timeout /t 1 /nobreak >nul
+        sc.exe create "%SERVICE_NAME%" binPath= "%BIN_PATH%" start= auto DisplayName= "%DISPLAY_NAME%"
+    )
+) else (
+    echo [*] Registering Windows Service '%SERVICE_NAME%'...
+    sc.exe create "%SERVICE_NAME%" binPath= "%BIN_PATH%" start= auto DisplayName= "%DISPLAY_NAME%"
+)
 
 :: Configure failure recovery (restart automatically)
-sc.exe failure "%SERVICE_NAME%" reset= 86400 actions= restart/60000/restart/60000/restart/60000
+sc.exe failure "%SERVICE_NAME%" reset= 86400 actions= restart/60000/restart/60000/restart/60000 >nul 2>&1
 
 :: Set description
-sc.exe description "%SERVICE_NAME%" "Background listener service for streaming MQTT meter messages into SQL Server."
+sc.exe description "%SERVICE_NAME%" "Background listener service for streaming MQTT meter messages into SQL Server." >nul 2>&1
 
 :: Start service
 echo [*] Starting service '%SERVICE_NAME%'...
 sc.exe start "%SERVICE_NAME%"
 
 echo.
-echo [?] Service '%SERVICE_NAME%' registered successfully!
-echo [*] You can check status in 'services.msc' or logs at '%PUBLISH_DIR%\logs\'
+echo [?] Service '%SERVICE_NAME%' setup completed!
+echo [*] Logs are written to: '%PUBLISH_DIR%\logs\'
 echo.
 pause
