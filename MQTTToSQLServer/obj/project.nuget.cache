@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "D8tfbY5OWxA=",
+  "dgSpecHash": "4FftEHimZn4=",
   "success": true,
   "projectFilePath": "C:\\Users\\eats\\Documents\\WORKSPACE\\REPO\\MQTT-to-SQLServer\\MQTTToSQLServer\\MQTTToSQLServer.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,7 @@
     "C:\\Users\\eats\\.nuget\\packages\\microsoft.entityframeworkcore.design\\2.1.14\\microsoft.entityframeworkcore.design.2.1.14.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\2.1.14\\microsoft.entityframeworkcore.relational.2.1.14.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\2.1.14\\microsoft.entityframeworkcore.sqlserver.2.1.14.nupkg.sha512",
+    "C:\\Users\\eats\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\2.1.14\\microsoft.entityframeworkcore.tools.2.1.14.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\2.1.1\\microsoft.extensions.caching.abstractions.2.1.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.extensions.caching.memory\\2.1.1\\microsoft.extensions.caching.memory.2.1.1.nupkg.sha512",
     "C:\\Users\\eats\\.nuget\\packages\\microsoft.extensions.configuration\\2.1.1\\microsoft.extensions.configuration.2.1.1.nupkg.sha512",
