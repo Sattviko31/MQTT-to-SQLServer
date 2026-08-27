@@ -1,4 +1,6 @@
-﻿@echo off
+@echo off
+setlocal EnableDelayedExpansion
+
 net session >nul 2>&1
 if %errorLevel% neq 0 (
     echo [!] Please run this script as Administrator!
@@ -16,6 +18,6 @@ echo [*] Removing service '%SERVICE_NAME%'...
 sc.exe delete "%SERVICE_NAME%"
 
 echo.
-echo [✓] Service '%SERVICE_NAME%' uninstalled successfully!
+echo [?] Service '%SERVICE_NAME%' uninstalled successfully!
 echo.
 pause
