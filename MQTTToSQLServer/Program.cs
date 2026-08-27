@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -89,10 +89,9 @@ namespace MQTTToSQLServer
                 await Task.WhenAny(readKeyTask, Task.Delay(-1, _cts.Token)).ContinueWith(_ => { });
 
                 _cts.Cancel();
-                LogMessage("\nStopping MQTT client and shutting down...");
                 await StopServiceAsync();
                 await serviceTask;
-                LogMessage("Application exited cleanly.");
+                LogMessage("[✓] Application exited cleanly.");
             }
         }
 
@@ -106,14 +105,13 @@ namespace MQTTToSQLServer
                 // 2. Load Configurations (ScaleConfig, ColumnMapping, ExistingColumns)
                 await LoadConfigurationsAsync();
 
-                // 3. Start Background Workers
+                // 3. Start Background Worker for Queue
                 var queueTask = Task.Run(() => ProcessQueueAsync(ct));
-                var monitorTask = Task.Run(() => MonitorQueueAsync(ct));
 
                 // 4. Connect and Subscribe to MQTT
                 await ConnectAndSubscribeAsync();
 
-                await Task.WhenAll(queueTask, monitorTask);
+                await queueTask;
             }
             catch (Exception ex)
             {
@@ -323,24 +321,6 @@ namespace MQTTToSQLServer
             }
         }
 
-        private static async Task MonitorQueueAsync(CancellationToken ct)
-        {
-            int interval = Math.Max(1, _config.Processing.MonitorIntervalSeconds) * 1000;
-            while (!ct.IsCancellationRequested)
-            {
-                try
-                {
-                    await Task.Delay(interval, ct);
-                    LogMessage($"[STATS] Total: {_messageCount} | Success: {_successCount} | Errors: {_errorCount} | Queue: {MessageQueue.Count}");
-                }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-                catch { }
-            }
-        }
-
         private static async Task ProcessSingleMessageAsync(MqttMessageBuffer buffer)
         {
             try
@@ -362,14 +342,15 @@ namespace MQTTToSQLServer
                 await EnsureColumnsExistAsync(mqttData);
                 await SaveToDatabaseAsync(mqttData, deviceId, deviceKey);
 
-                Interlocked.Increment(ref _successCount);
-                Interlocked.Increment(ref _messageCount);
+                long success = Interlocked.Increment(ref _successCount);
+                long total = Interlocked.Increment(ref _messageCount);
+                LogMessage($"[📥] Data saved from topic '{buffer.Topic}' for Device '{deviceId}' (DeviceKey: {deviceKey}) | Total: {total}, Success: {success}");
             }
             catch (Exception ex)
             {
-                Interlocked.Increment(ref _errorCount);
-                Interlocked.Increment(ref _messageCount);
-                LogMessage($"[✗] Error processing message: {ex.Message}", true);
+                long errors = Interlocked.Increment(ref _errorCount);
+                long total = Interlocked.Increment(ref _messageCount);
+                LogMessage($"[✗] Error processing message on topic '{buffer.Topic}': {ex.Message} | Total: {total}, Errors: {errors}", true);
                 await LogFailedMessage(buffer, ex.Message);
             }
         }
@@ -698,6 +679,7 @@ namespace MQTTToSQLServer
 
         private static async Task DisconnectAsync()
         {
+            LogMessage("[!] Service stopping...");
             if (_mqttClient != null)
             {
                 try
@@ -710,9 +692,7 @@ namespace MQTTToSQLServer
                 }
                 catch { }
             }
-            LogMessage($"\n╔══════════════════════════════════════════════════════════╗");
-            LogMessage($"║   Final Stats: Total={_messageCount} | Success={_successCount} | Errors={_errorCount}   ║");
-            LogMessage($"╚══════════════════════════════════════════════════════════╝");
+            LogMessage($"[✓] Service stopped. Final Stats: Total={_messageCount} | Success={_successCount} | Errors={_errorCount}");
         }
     }
 }
