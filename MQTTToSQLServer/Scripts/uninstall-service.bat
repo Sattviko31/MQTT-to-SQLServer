@@ -15,5 +15,7 @@ timeout /t 3 /nobreak >nul
 echo [*] Removing service '%SERVICE_NAME%'...
 sc.exe delete "%SERVICE_NAME%"
 
-echo [✓] Service '%SERVICE_NAME%' removed successfully!
+echo.
+echo [✓] Service '%SERVICE_NAME%' uninstalled successfully!
+echo.
 pause
