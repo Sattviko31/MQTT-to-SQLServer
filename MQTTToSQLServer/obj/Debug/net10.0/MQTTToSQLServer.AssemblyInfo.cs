@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MQTTToSQLServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+edbc2d74bfc3316d879334c6200ea050abe1346c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MQTTToSQLServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MQTTToSQLServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

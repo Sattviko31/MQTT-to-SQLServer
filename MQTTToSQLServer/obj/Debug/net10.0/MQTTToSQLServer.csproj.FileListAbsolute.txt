@@ -110,3 +110,4 @@ D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\MQTTToSQLServer\obj\Debug
 D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\MQTTToSQLServer\obj\Debug\net10.0\MQTTToSQLServer.pdb
 D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\MQTTToSQLServer\obj\Debug\net10.0\MQTTToSQLServer.genruntimeconfig.cache
 D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\MQTTToSQLServer\obj\Debug\net10.0\ref\MQTTToSQLServer.dll
+D:\File Project\Backup\MQTTToSQLServer\MQTTToSQLServer\MQTTToSQLServer\obj\Debug\net10.0\MQTTToSQLServer.sourcelink.json
