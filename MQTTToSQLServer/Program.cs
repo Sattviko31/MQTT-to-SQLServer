@@ -71,10 +71,7 @@ namespace MQTTToSQLServer
             // 1. Load Configuration from appsettings.json
             LoadConfiguration();
 
-            // 2. Run Database Migrations / Ensure Database Exists
-            await InitializeDatabaseAsync();
-
-            // 3. Load Configurations (ScaleConfig, ColumnMapping, ExistingColumns)
+            // 2. Load Configurations (ScaleConfig, ColumnMapping, ExistingColumns)
             await LoadConfigurationsAsync();
 
             // 4. Start Background Workers
@@ -128,27 +125,6 @@ namespace MQTTToSQLServer
             Console.WriteLine($"  - MQTT Broker: {_config.Mqtt.BrokerHost}:{_config.Mqtt.BrokerPort}");
             Console.WriteLine($"  - MQTT Topic: {_config.Mqtt.Topic}");
             Console.WriteLine($"  - Database Connection: {_connectionString.Split(';')[0]}");
-        }
-
-        private static async Task InitializeDatabaseAsync()
-        {
-            Console.WriteLine("\n[*] Initializing Database & Applying Migrations...");
-            try
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                optionsBuilder.UseSqlServer(_connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null));
-
-                using (var dbContext = new ApplicationDbContext(optionsBuilder.Options))
-                {
-                    await dbContext.Database.MigrateAsync();
-                }
-                Console.WriteLine("[✓] Database schema verified and up to date.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[!] Database migration check notice: {ex.Message}");
-                Console.WriteLine("[*] Continuing with existing database schema...");
-            }
         }
 
         private static async Task LoadConfigurationsAsync()
