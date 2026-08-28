@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -109,13 +110,14 @@ namespace MQTTToSQLServer
                 // 2. Load Configurations (ScaleConfig, ColumnMapping, ExistingColumns)
                 await LoadConfigurationsAsync();
 
-                // 3. Start Background Worker for Queue
+                // 3. Start Background Worker for Queue & Heartbeat
                 var queueTask = Task.Run(() => ProcessQueueAsync(ct));
+                var monitorTask = Task.Run(() => MonitorHeartbeatAsync(ct));
 
                 // 4. Connect and Subscribe to MQTT
                 await ConnectAndSubscribeAsync();
 
-                await queueTask;
+                await Task.WhenAll(queueTask, monitorTask);
             }
             catch (Exception ex)
             {
@@ -165,6 +167,29 @@ namespace MQTTToSQLServer
 
         private static async Task LoadConfigurationsAsync()
         {
+            // 1. Seed standard defaults first
+            ScaleConfig["PHASE_R"] = 10m;
+            ScaleConfig["PHASE_S"] = 10m;
+            ScaleConfig["PHASE_T"] = 10m;
+            ScaleConfig["AMPERE_R"] = 1000m;
+            ScaleConfig["AMPERE_S"] = 1000m;
+            ScaleConfig["AMPERE_T"] = 1000m;
+            ScaleConfig["COSPHI"] = 1000m;
+            ScaleConfig["W"] = 10m;
+            ScaleConfig["AKTIF_POWER"] = 100m;
+            ScaleConfig["TOTALW"] = 100m;
+            ScaleConfig["TOTALW1M"] = 100m;
+            ScaleConfig["F"] = 10m;
+
+            ColumnMapping["VR"] = "PHASE_R";
+            ColumnMapping["VS"] = "PHASE_S";
+            ColumnMapping["VT"] = "PHASE_T";
+            ColumnMapping["AKTIF_W"] = "Aktif_Power";
+            ColumnMapping["AKTIFPOWER"] = "Aktif_Power";
+            ColumnMapping["TOTAL_W"] = "TotalW";
+            ColumnMapping["TOTAL_W1M"] = "TotalW1M";
+            ColumnMapping["COS_PHI"] = "CosPhi";
+
             try
             {
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -172,7 +197,7 @@ namespace MQTTToSQLServer
 
                 using (var db = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    // 1. Load Scale Configs
+                    // 2. Load Scale Configs from DB (overrides defaults if present)
                     var scales = await db.ColumnScaleConfigs.AsNoTracking().ToListAsync();
                     foreach (var s in scales)
                     {
@@ -180,7 +205,7 @@ namespace MQTTToSQLServer
                             ScaleConfig[s.ColumnName.ToUpper()] = s.ScaleFactor;
                     }
 
-                    // 2. Load Column Mappings
+                    // 3. Load Column Mappings from DB (overrides defaults if present)
                     var mappings = await db.ColumnMappings.AsNoTracking().Where(m => m.IsActive).ToListAsync();
                     foreach (var m in mappings)
                     {
@@ -189,7 +214,7 @@ namespace MQTTToSQLServer
                     }
                 }
 
-                // 3. Load Existing Columns from Database
+                // 4. Load Existing Columns from Database
                 using (var conn = new SqlConnection(_connectionString))
                 {
                     await conn.OpenAsync();
@@ -203,32 +228,14 @@ namespace MQTTToSQLServer
                     }
                 }
 
-                LogMessage($"[✓] Loaded {ScaleConfig.Count} scale configurations from DB");
-                LogMessage($"[✓] Loaded {ColumnMapping.Count} column mappings from DB");
+                LogMessage($"[✓] Loaded {ScaleConfig.Count} scale configurations");
+                LogMessage($"[✓] Loaded {ColumnMapping.Count} column mappings");
                 LogMessage($"[✓] Loaded {ExistingColumns.Count} existing columns in KWHData table");
             }
             catch (Exception ex)
             {
                 LogMessage($"[!] Failed to load configurations from DB: {ex.Message}", true);
                 LogMessage("[!] Using fallback defaults...");
-
-                ScaleConfig["PHASE_R"] = 10m;
-                ScaleConfig["PHASE_S"] = 10m;
-                ScaleConfig["PHASE_T"] = 10m;
-                ScaleConfig["AMPERE_R"] = 1000m;
-                ScaleConfig["AMPERE_S"] = 1000m;
-                ScaleConfig["AMPERE_T"] = 1000m;
-                ScaleConfig["COSPHI"] = 1000m;
-                ScaleConfig["W"] = 10m;
-                ScaleConfig["AKTIF_POWER"] = 100m;
-                ScaleConfig["TOTALW"] = 100m;
-                ScaleConfig["TOTALW1M"] = 100m;
-                ScaleConfig["F"] = 10m;
-
-                ColumnMapping["VR"] = "PHASE_R";
-                ColumnMapping["VS"] = "PHASE_S";
-                ColumnMapping["VT"] = "PHASE_T";
-                ColumnMapping["AKTIF_W"] = "Aktif_Power";
             }
         }
 
@@ -265,12 +272,31 @@ namespace MQTTToSQLServer
 
                 _mqttClient.ApplicationMessageReceivedAsync += e =>
                 {
+                    string topic = e.ApplicationMessage.Topic ?? "";
+                    string payload = "";
+
+                    if (e.ApplicationMessage.PayloadSegment.Count > 0 && e.ApplicationMessage.PayloadSegment.Array != null)
+                    {
+                        payload = Encoding.UTF8.GetString(
+                            e.ApplicationMessage.PayloadSegment.Array,
+                            e.ApplicationMessage.PayloadSegment.Offset,
+                            e.ApplicationMessage.PayloadSegment.Count);
+                    }
+                    else
+                    {
+                        payload = e.ApplicationMessage.ConvertPayloadToString() ?? "";
+                    }
+
+                    string preview = payload.Length > 80 ? payload.Substring(0, 80) + "..." : payload;
+                    LogMessage($"[📩] Message received on topic '{topic}' ({payload.Length} bytes): {preview}");
+
                     MessageQueue.Enqueue(new MqttMessageBuffer
                     {
-                        Topic = e.ApplicationMessage.Topic,
-                        Payload = e.ApplicationMessage.ConvertPayloadToString() ?? "",
+                        Topic = topic,
+                        Payload = payload,
                         ReceivedAt = DateTime.Now
                     });
+
                     return Task.CompletedTask;
                 };
 
@@ -289,8 +315,26 @@ namespace MQTTToSQLServer
                 var clientOptions = optionsBuilder.Build();
                 await _mqttClient.ConnectAsync(clientOptions);
 
-                await _mqttClient.SubscribeAsync(_config.Mqtt.Topic, MqttQualityOfServiceLevel.AtMostOnce);
-                LogMessage($"[✓] Subscribed to topic ({_config.Mqtt.Topic})");
+                // Prepare list of topics to subscribe
+                var configuredTopic = (_config.Mqtt.Topic ?? "").Trim();
+                if (string.IsNullOrEmpty(configuredTopic))
+                {
+                    configuredTopic = "#";
+                }
+
+                var topicsToSubscribe = new List<string> { configuredTopic };
+
+                // Auto-subscribe to wildcard subtopics if user specified a specific topic like "data/KWHAPP"
+                if (!configuredTopic.EndsWith("#") && !configuredTopic.EndsWith("+"))
+                {
+                    topicsToSubscribe.Add(configuredTopic.TrimEnd('/') + "/#");
+                }
+
+                foreach (var t in topicsToSubscribe.Distinct())
+                {
+                    await _mqttClient.SubscribeAsync(t, MqttQualityOfServiceLevel.AtMostOnce);
+                    LogMessage($"[✓] Subscribed to topic ({t})");
+                }
             }
             catch (Exception ex)
             {
@@ -319,9 +363,29 @@ namespace MQTTToSQLServer
                 }
                 catch (Exception ex)
                 {
-                    LogMessage($"[✗] Queue error: {ex.Message}", true);
+                    LogMessage($"[✗] Queue processing error: {ex.Message}", true);
                     await Task.Delay(1000, ct).ContinueWith(_ => { });
                 }
+            }
+        }
+
+        private static async Task MonitorHeartbeatAsync(CancellationToken ct)
+        {
+            int intervalSec = _config.Processing.MonitorIntervalSeconds > 0 ? _config.Processing.MonitorIntervalSeconds : 15;
+            while (!ct.IsCancellationRequested)
+            {
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(intervalSec), ct);
+                    bool isConnected = _mqttClient != null && _mqttClient.IsConnected;
+                    string connStatus = isConnected ? "Connected" : "Disconnected";
+                    LogMessage($"[*] Heartbeat: MQTT [{connStatus}] | Queue: {MessageQueue.Count} | Total: {_messageCount} | Success: {_successCount} | Errors: {_errorCount}");
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+                catch { }
             }
         }
 
@@ -329,26 +393,31 @@ namespace MQTTToSQLServer
         {
             try
             {
-                if (string.IsNullOrEmpty(buffer.Payload)) return;
+                if (string.IsNullOrWhiteSpace(buffer.Payload))
+                {
+                    LogMessage($"[!] Empty or whitespace payload received on topic '{buffer.Topic}'", true);
+                    return;
+                }
 
                 var mqttData = ParseDynamicJson(buffer.Payload);
-                if (mqttData == null)
+                if (mqttData == null || mqttData.Properties.Count == 0)
                 {
-                    await LogFailedMessage(buffer, "JSON parse failed");
+                    LogMessage($"[!] No valid JSON data extracted from payload on topic '{buffer.Topic}'", true);
+                    await LogFailedMessage(buffer, "JSON parsing failed or empty payload properties");
                     return;
                 }
 
                 ApplyColumnMapping(mqttData);
 
                 string deviceId = ExtractDeviceId(buffer.Topic, mqttData);
-                string deviceKey = await GetOrCreateDeviceKeyAsync(deviceId, mqttData.GetProperty("_groupName"));
+                string deviceKey = await GetOrCreateDeviceKeyAsync(deviceId, mqttData.GetProperty("_groupName") ?? mqttData.GetProperty("GroupName"));
 
                 await EnsureColumnsExistAsync(mqttData);
                 await SaveToDatabaseAsync(mqttData, deviceId, deviceKey);
 
                 long success = Interlocked.Increment(ref _successCount);
                 long total = Interlocked.Increment(ref _messageCount);
-                LogMessage($"[📥] Data saved from topic '{buffer.Topic}' for Device '{deviceId}' (DeviceKey: {deviceKey}) | Total: {total}, Success: {success}");
+                LogMessage($"[📥] Saved data from topic '{buffer.Topic}' for Device '{deviceId}' ({deviceKey}) | Total: {total}, Success: {success}");
             }
             catch (Exception ex)
             {
@@ -366,16 +435,61 @@ namespace MQTTToSQLServer
                 using (var doc = JsonDocument.Parse(json))
                 {
                     var data = new DynamicMqttData();
-                    foreach (var prop in doc.RootElement.EnumerateObject())
-                    {
-                        data.Properties[prop.Name] = prop.Value.ToString();
-                    }
+                    ExtractJsonProperties(doc.RootElement, data.Properties);
                     return data;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                string preview = json.Length > 100 ? json.Substring(0, 100) + "..." : json;
+                LogMessage($"[!] JSON parse exception: {ex.Message} | Snippet: {preview}", true);
                 return null;
+            }
+        }
+
+        private static void ExtractJsonProperties(JsonElement element, Dictionary<string, string?> properties)
+        {
+            if (element.ValueKind == JsonValueKind.Object)
+            {
+                foreach (var prop in element.EnumerateObject())
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Object)
+                    {
+                        ExtractJsonProperties(prop.Value, properties);
+                    }
+                    else if (prop.Value.ValueKind == JsonValueKind.Array)
+                    {
+                        foreach (var item in prop.Value.EnumerateArray())
+                        {
+                            if (item.ValueKind == JsonValueKind.Object)
+                            {
+                                if (item.TryGetProperty("name", out var nameProp) && (item.TryGetProperty("val", out var valProp) || item.TryGetProperty("value", out valProp)))
+                                {
+                                    properties[nameProp.ToString()] = valProp.ToString();
+                                }
+                                else if (item.TryGetProperty("tag", out var tagProp) && (item.TryGetProperty("val", out var valProp2) || item.TryGetProperty("value", out valProp2)))
+                                {
+                                    properties[tagProp.ToString()] = valProp2.ToString();
+                                }
+                                else
+                                {
+                                    ExtractJsonProperties(item, properties);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        properties[prop.Name] = prop.Value.ToString();
+                    }
+                }
+            }
+            else if (element.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in element.EnumerateArray())
+                {
+                    ExtractJsonProperties(item, properties);
+                }
             }
         }
 
@@ -415,22 +529,44 @@ namespace MQTTToSQLServer
 
         private static string ExtractDeviceId(string topic, DynamicMqttData data)
         {
-            string? groupName = data.GetProperty("_groupName");
+            string? groupName = data.GetProperty("_groupName")
+                ?? data.GetProperty("groupName")
+                ?? data.GetProperty("GroupName");
+
             if (!string.IsNullOrEmpty(groupName) && groupName!.ToUpper().Contains("KWHMETER"))
                 return $"kwhapp{groupName!.ToUpper().Replace("KWHMETER", "")}";
 
-            string[] parts = topic.Split('/');
+            if (!string.IsNullOrEmpty(groupName))
+                return groupName!;
+
+            string? explicitDeviceId = data.GetProperty("DeviceId")
+                ?? data.GetProperty("deviceId")
+                ?? data.GetProperty("dev_id")
+                ?? data.GetProperty("DeviceKey")
+                ?? data.GetProperty("deviceKey");
+
+            if (!string.IsNullOrEmpty(explicitDeviceId))
+                return explicitDeviceId!;
+
+            string[] parts = topic.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 3) return parts[2];
+            if (parts.Length >= 2 && !parts[1].Equals("KWHAPP", StringComparison.OrdinalIgnoreCase)) return parts[1];
+            if (parts.Length >= 1) return parts[parts.Length - 1];
 
             return "unknown";
         }
 
         private static async Task<string> GetOrCreateDeviceKeyAsync(string deviceId, string? groupName)
         {
+            if (string.IsNullOrWhiteSpace(deviceId))
+                deviceId = "UNKNOWN";
+
             if (DeviceKeyCache.TryGetValue(deviceId, out string? cached))
                 return cached;
 
             string deviceKey = deviceId.ToUpper();
+            if (deviceKey.Length > 20)
+                deviceKey = deviceKey.Substring(0, 20);
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -474,7 +610,7 @@ namespace MQTTToSQLServer
             }
 
             DeviceKeyCache.TryAdd(deviceId, deviceKey);
-            LogMessage($"[+] Registered: {deviceId} -> {deviceKey}");
+            LogMessage($"[+] Registered Device: {deviceId} -> {deviceKey}");
             return deviceKey;
         }
 
@@ -488,7 +624,7 @@ namespace MQTTToSQLServer
 
             foreach (var key in data.Properties.Keys.ToList())
             {
-                if (systemCols.Contains(key) || ExistingColumns.Contains(key)) continue;
+                if (key.StartsWith("_") || systemCols.Contains(key) || ExistingColumns.Contains(key)) continue;
 
                 if (!SafeSqlColumnNameRegex.IsMatch(key))
                 {
@@ -498,7 +634,7 @@ namespace MQTTToSQLServer
 
                 await AddColumnToDatabaseAsync(key);
                 ExistingColumns.Add(key);
-                LogMessage($"[+] New column added: {key}");
+                LogMessage($"[+] New dynamic column added to KWHData: {key}");
             }
         }
 
@@ -534,19 +670,28 @@ namespace MQTTToSQLServer
                     {
                         await conn.OpenAsync();
 
-                        var columns = new List<string> { "DeviceKey", "TerminalTime", "GroupName", "DeviceId" };
-                        var values = new List<string> { "@DeviceKey", "@TerminalTime", "@GroupName", "@DeviceId" };
+                        var columns = new List<string> { "DeviceKey", "TerminalTime", "GroupName", "DeviceId", "ReceivedTime" };
+                        var values = new List<string> { "@DeviceKey", "@TerminalTime", "@GroupName", "@DeviceId", "@ReceivedTime" };
                         var parameters = new List<SqlParameter>
                         {
                             new SqlParameter("@DeviceKey", deviceKey),
-                            new SqlParameter("@TerminalTime", ParseDateTime(data.GetProperty("_terminalTime"))),
-                            new SqlParameter("@GroupName", (object?)data.GetProperty("_groupName") ?? DBNull.Value),
-                            new SqlParameter("@DeviceId", deviceId)
+                            new SqlParameter("@TerminalTime", ParseDateTime(data.GetProperty("_terminalTime") ?? data.GetProperty("TerminalTime") ?? data.GetProperty("time") ?? data.GetProperty("timestamp"))),
+                            new SqlParameter("@GroupName", (object?)data.GetProperty("_groupName") ?? (object?)data.GetProperty("GroupName") ?? DBNull.Value),
+                            new SqlParameter("@DeviceId", deviceId),
+                            new SqlParameter("@ReceivedTime", DateTime.Now)
                         };
 
                         foreach (var kvp in data.Properties)
                         {
                             if (kvp.Key.StartsWith("_")) continue;
+                            if (kvp.Key.Equals("DeviceKey", StringComparison.OrdinalIgnoreCase) ||
+                                kvp.Key.Equals("TerminalTime", StringComparison.OrdinalIgnoreCase) ||
+                                kvp.Key.Equals("GroupName", StringComparison.OrdinalIgnoreCase) ||
+                                kvp.Key.Equals("DeviceId", StringComparison.OrdinalIgnoreCase) ||
+                                kvp.Key.Equals("ReceivedTime", StringComparison.OrdinalIgnoreCase) ||
+                                kvp.Key.Equals("Id", StringComparison.OrdinalIgnoreCase))
+                                continue;
+
                             if (!ExistingColumns.Contains(kvp.Key)) continue;
 
                             columns.Add($"[{kvp.Key}]");
@@ -571,9 +716,13 @@ namespace MQTTToSQLServer
                     }
                     return;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    if (retry == maxRetries - 1) throw;
+                    if (retry == maxRetries - 1)
+                    {
+                        LogMessage($"[✗] Database insertion failed after {maxRetries} retries: {ex.Message}", true);
+                        throw;
+                    }
                     await Task.Delay(retryDelay * (retry + 1));
                 }
             }
@@ -642,6 +791,8 @@ namespace MQTTToSQLServer
         {
             try
             {
+                LogMessage($"[!] Failed message logged. Reason: {reason} | Topic: {buffer.Topic}", true);
+
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     await conn.OpenAsync();
@@ -650,13 +801,16 @@ namespace MQTTToSQLServer
                     {
                         cmd.Parameters.AddWithValue("@Topic", buffer.Topic);
                         cmd.Parameters.AddWithValue("@Payload", buffer.Payload);
-                        cmd.Parameters.AddWithValue("@Reason", reason);
+                        cmd.Parameters.AddWithValue("@Reason", reason.Length > 500 ? reason.Substring(0, 500) : reason);
                         cmd.Parameters.AddWithValue("@ReceivedAt", buffer.ReceivedAt);
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                LogMessage($"[✗] Failed to record in FailedMessages table: {ex.Message}", true);
+            }
         }
 
         public static void LogMessage(string message, bool isError = false)
