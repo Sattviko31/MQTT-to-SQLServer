@@ -40,8 +40,19 @@ public class KwhMonitoringService : BackgroundService
         _logger.LogInformation("║   HAIWELL ELECTRICAL - MQTT TO SQL SERVER SERVICE        ║");
         _logger.LogInformation("╚══════════════════════════════════════════════════════════╝");
 
+        // LOG KONFIGURASI YANG DIGUNAKAN (penting untuk troubleshooting)
+        _logger.LogInformation($"[*] Konfigurasi aktif:");
+        _logger.LogInformation($"    - SQL Server: {_config.Database.Server}");
+        _logger.LogInformation($"    - Database: {_config.Database.DatabaseName}");
+        _logger.LogInformation($"    - SQL User: {_config.Database.Username}");
+        _logger.LogInformation($"    - MQTT Broker: {_config.Mqtt.BrokerIp}:{_config.Mqtt.Port}");
+
         try
         {
+            // 1. Validasi koneksi database dengan retry
+            _logger.LogInformation("[*] Memvalidasi koneksi ke SQL Server...");
+            await ValidateDatabaseConnectionAsync(stoppingToken);
+
             _logger.LogInformation("[*] Memulai Smart Migration Database...");
             await RunMigrationAsync(stoppingToken);
 
@@ -61,6 +72,24 @@ public class KwhMonitoringService : BackgroundService
         {
             _logger.LogInformation("[*] Service dihentikan.");
         }
+        catch (SqlException ex) when (ex.Number == 258 || ex.Number == -2 || ex.Number == 10060 || ex.Number == 10061 || ex.Number == 18456 || ex.Number == 4060)
+        {
+            // Error koneksi SQL Server - berikan instruksi troubleshooting
+            _logger.LogCritical(ex, "[✗] Gagal koneksi ke SQL Server");
+            _logger.LogError("═══════════════════════════════════════════════════════════");
+            _logger.LogError("TROUBLESHOOTING - SQL Server Connection Failed:");
+            _logger.LogError($"1. Cek SQL Server dapat diakses: ping {_config.Database.Server}");
+            _logger.LogError($"2. Cek port 1433 terbuka: telnet {_config.Database.Server} 1433");
+            _logger.LogError("3. Cek SQL Server Configuration Manager:");
+            _logger.LogError("   - TCP/IP → Enabled");
+            _logger.LogError("   - SQL Server Browser → Running");
+            _logger.LogError("4. Cek Windows Firewall → Allow port 1433");
+            _logger.LogError("5. Cek SQL Server Authentication Mode → Mixed Mode");
+            _logger.LogError($"6. Cek instance name (jika pakai SQLEXPRESS):");
+            _logger.LogError($"   Gunakan: {_config.Database.Server}\\SQLEXPRESS");
+            _logger.LogError("7. Jalankan ulang setup: hapus appsettings.user.json");
+            _logger.LogError("═══════════════════════════════════════════════════════════");
+        }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "[✗] Fatal error pada service");
@@ -70,6 +99,40 @@ public class KwhMonitoringService : BackgroundService
             if (_mqttClient?.IsConnected == true) await _mqttClient.DisconnectAsync();
             _logger.LogInformation($"[STATS FINAL] Total: {_messageCount} | Success: {_successCount} | Errors: {_errorCount}");
         }
+    }
+
+    // ============================================================
+    // VALIDASI KONEKSI DATABASE DENGAN RETRY
+    // ============================================================
+    private async Task ValidateDatabaseConnectionAsync(CancellationToken ct)
+    {
+        const int maxRetries = 5;
+        const int initialDelayMs = 3000;
+
+        for (int attempt = 1; attempt <= maxRetries; attempt++)
+        {
+            try
+            {
+                _logger.LogInformation($"[*] Attempt koneksi ke SQL Server ({attempt}/{maxRetries})...");
+
+                using var conn = new SqlConnection(_config.Database.GetMasterConnectionString());
+                await conn.OpenAsync(ct);
+
+                _logger.LogInformation($"[✓] Koneksi ke SQL Server berhasil (attempt {attempt})");
+                return;
+            }
+            catch (SqlException ex) when (attempt < maxRetries)
+            {
+                _logger.LogWarning($"[!] Koneksi gagal (attempt {attempt}): {ex.Message}");
+
+                var delay = initialDelayMs * attempt;
+                _logger.LogInformation($"[*] Retry dalam {delay / 1000} detik...");
+                await Task.Delay(delay, ct);
+            }
+        }
+
+        throw new Exception($"Gagal koneksi ke SQL Server setelah {maxRetries} percobaan. " +
+            $"Server: {_config.Database.Server}, Database: {_config.Database.DatabaseName}");
     }
 
     #region Smart Migration - DIPERBAIKI untuk DBO Issue
